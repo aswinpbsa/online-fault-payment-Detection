@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fraud Detection System</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://res.cloudinary.com/duceao3wn/image/upload/v1749813106/key7_lekzfp.jpg') no-repeat center center;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    /* Page Container Styles */
+    .page-container {
+      width: 520px;
+      padding: 25px;
+      margin: 50px 0 0 10%;
+      background: rgba(1, 82, 162, 0.95);
+      border-radius: 8px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      display: none;
+    }
+
+    /* Home Page */
+    #homePage {
+      display: block;
+    }
+
+    .page-container h1 {
+      color: rgb(245, 245, 67);
+      font-size: 24px;
+      margin-bottom: 18px;
+    }
+
+    .page-container p {
+      font-size: 15px;
+      margin-bottom: 18px;
+      line-height: 1.4;
+      color: white;
+    }
+
+    /* Button Styles */
+    .btn {
+      padding: 10px 25px;
+      background: #010911;
+      color: rgb(234, 243, 106);
+      border: none;
+      border-radius: 4px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin: 10px;
+      min-width: 180px;
+    }
+
+    .btn:hover {
+      background: #6f0000;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    .back-btn {
+      background: #333;
+    }
+
+    .back-btn:hover {
+      background: #555;
+    }
+
+    /* Form Page Styles */
+    #formPage form {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    #formPage label {
+      margin: 8px 0 4px;
+      font-size: 14px;
+      font-weight: bold;
+      color: rgb(245, 245, 67);
+    }
+
+    #formPage input,
+    #formPage select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 5px;
+      border: 1px solid #00080a;
+      border-radius: 4px;
+      font-size: 14px;
+      background: white;
+      box-sizing: border-box;
+      height: 36px;
+    }
+
+    #formPage select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000000'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 12px;
+      padding-right: 25px;
+    }
+
+    /* Results Page Styles */
+    #resultPage .result-icon {
+      font-size: 60px;
+      margin: 15px 0;
+    }
+
+    #resultPage .fraud {
+      color: #ff4444;
+      animation: pulse 1.5s infinite;
+    }
+
+    #resultPage .safe {
+      color: #44ff44;
+    }
+
+    #resultPage h2 {
+      color: rgb(245, 245, 67);
+      margin-bottom: 12px;
+      font-size: 22px;
+    }
+
+    .result-details {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      border-radius: 6px;
+      margin: 15px 0;
+      text-align: left;
+    }
+
+    .result-details h3 {
+      margin-top: 0;
+      color: rgb(245, 245, 67);
+      font-size: 18px;
+    }
+
+    .result-details p {
+      margin: 8px 0;
+      font-size: 14px;
+    }
+
+    .result-details strong {
+      color: rgb(245, 245, 67);
+      width: 180px;
+      display: inline-block;
+    }
+
+    /* Probability Meter */
+    .probability-meter {
+      margin: 20px 0;
+    }
+
+    .probability-meter h3 {
+      color: rgb(245, 245, 67);
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .meter-container {
+      width: 100%;
+      height: 24px;
+      background-color: #f3f3f3;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    .meter-bar {
+      height: 100%;
+      background: linear-gradient(to right, #2ecc71, #f39c12, #e74c3c);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 12px;
+      transition: width 0.4s ease;
+    }
+
+    /* Alert Messages */
+    .fraud-warning {
+      background-color: rgba(255, 68, 68, 0.15);
+      padding: 15px;
+      border-radius: 6px;
+      border-left: 3px solid #ff4444;
+      margin-top: 15px;
+    }
+
+    .fraud-warning h3 {
+      color: #ff4444;
+      margin-top: 0;
+      font-size: 16px;
+    }
+
+    .safe-message {
+      background-color: rgba(68, 255, 68, 0.15);
+      padding: 15px;
+      border-radius: 6px;
+      border-left: 3px solid #44ff44;
+      margin-top: 15px;
+    }
+
+    .safe-message h3 {
+      color: #44ff44;
+      margin-top: 0;
+      font-size: 16px;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: none;
+      width: 30px;
+      height: 30px;
+      margin: 15px auto;
+      border: 3px solid rgba(245, 245, 67, 0.2);
+      border-top: 3px solid rgb(245, 245, 67);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Home Page -->
+  <div class="page-container" id="homePage">
+    <h1>Fraud Detection System</h1>
+    <p>Our AI-powered system detects fraudulent transactions with high accuracy to protect your financial operations.</p>
+    <button class="btn" id="startBtn">Start Analysis</button>
+  </div>
+
+  <!-- Form Page -->
+  <div class="page-container" id="formPage">
+    <h1>Transaction Details</h1>
+    <form id="fraudForm">
+      <label for="amount">Amount ($)</label>
+      <input type="number" id="amount" name="amount" required min="0" step="0.01" placeholder="0.00">
+
+      <label for="type">Transaction Type</label>
+      <select id="type" name="type" required>
+        <option value="">Select type</option>
+        <option value="CASH_OUT">CASH_OUT</option>
+        <option value="TRANSFER">TRANSFER</option>
+        <option value="PAYMENT">PAYMENT</option>
+        <option value="CASH_IN">CASH_IN</option>
+      </select>
+
+      <label for="oldbalanceOrg">Sender Initial Balance ($)</label>
+      <input type="number" id="oldbalanceOrg" name="oldbalanceOrg" required min="0" step="0.01" placeholder="0.00">
+
+      <label for="newbalanceOrig">Sender New Balance ($)</label>
+      <input type="number" id="newbalanceOrig" name="newbalanceOrig" required min="0" step="0.01" placeholder="0.00">
+
+      <label for="oldbalanceDest">Receiver Initial Balance ($)</label>
+      <input type="number" id="oldbalanceDest" name="oldbalanceDest" required min="0" step="0.01" placeholder="0.00">
+
+      <label for="newbalanceDest">Receiver New Balance ($)</label>
+      <input type="number" id="newbalanceDest" name="newbalanceDest" required min="0" step="0.01" placeholder="0.00">
+
+      <button type="submit" class="btn" id="submitBtn">Check for Fraud</button>
+      <button type="button" class="btn back-btn" id="backBtn">Back to Home</button>
+    </form>
+    <div class="spinner" id="formSpinner"></div>
+  </div>
+
+  <!-- Results Page -->
+  <div class="page-container" id="resultPage">
+    <div id="resultContent">
+      <!-- Content will be inserted here by JavaScript -->
+    </div>
+    <button class="btn back-btn" id="resultBackBtn">Analyze Another</button>
+  </div>
+
+  <script>
+    // DOM Elements
+    const homePage = document.getElementById('homePage');
+    const formPage = document.getElementById('formPage');
+    const resultPage = document.getElementById('resultPage');
+    const resultContent = document.getElementById('resultContent');
+    const startBtn = document.getElementById('startBtn');
+    const backBtn = document.getElementById('backBtn');
+    const resultBackBtn = document.getElementById('resultBackBtn');
+    const form = document.getElementById('fraudForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const formSpinner = document.getElementById('formSpinner');
+
+    // Navigation functions
+    function showPage(page) {
+      homePage.style.display = 'none';
+      formPage.style.display = 'none';
+      resultPage.style.display = 'none';
+      page.style.display = 'block';
+    }
+
+    // Event Listeners
+    startBtn.addEventListener('click', () => showPage(formPage));
+    backBtn.addEventListener('click', () => showPage(homePage));
+    resultBackBtn.addEventListener('click', () => {
+      form.reset();
+      showPage(formPage);
+    });
+
+    // Form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Show loading spinner
+      submitBtn.disabled = true;
+      formSpinner.style.display = 'block';
+
+      // Collect form data
+      const formData = {
+        amount: parseFloat(document.getElementById('amount').value),
+        type: document.getElementById('type').value,
+        oldbalanceOrg: parseFloat(document.getElementById('oldbalanceOrg').value),
+        newbalanceOrig: parseFloat(document.getElementById('newbalanceOrig').value),
+        oldbalanceDest: parseFloat(document.getElementById('oldbalanceDest').value),
+        newbalanceDest: parseFloat(document.getElementById('newbalanceDest').value)
+      };
+
+      try {
+        const response = await fetch('http://localhost:5050/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Server error: ${response.status}`);
+        }
+
+        const resultData = await response.json();
+        displayResults(formData, resultData);
+        showPage(resultPage);
+      } catch (error) {
+        console.error('Error:', error);
+        resultContent.innerHTML = `
+          <div class="result-icon">❌</div>
+          <h2>Processing Error</h2>
+          <div class="fraud-warning">
+            <p>${error.message}</p>
+            <p>Please try again later.</p>
+          </div>
+        `;
+        showPage(resultPage);
+      } finally {
+        // Hide loading spinner
+        submitBtn.disabled = false;
+        formSpinner.style.display = 'none';
+      }
+    });
+
+    // Display results function
+    function displayResults(formData, resultData) {
+      const isFraud = resultData.isFraud;
+      const fraudPercentage = resultData.fraudProbability.toFixed(1);
+      const confidence = resultData.confidence.toFixed(1);
+
+      resultContent.innerHTML = `
+        <div class="result-icon ${isFraud ? 'fraud' : 'safe'}">
+          ${isFraud ? '⚠️' : '✅'}
+        </div>
+        <h2>${isFraud ? 'Fraud Detected!' : 'Transaction Safe'}</h2>
+        <p>Confidence: ${confidence}%</p>
+
+        <div class="result-details">
+          <h3>Transaction Summary</h3>
+          <p><strong>Amount:</strong> $${formData.amount.toFixed(2)}</p>
+          <p><strong>Type:</strong> ${formData.type}</p>
+          <p><strong>Sender Change:</strong> $${(formData.oldbalanceOrg - formData.newbalanceOrig).toFixed(2)}</p>
+          <p><strong>Receiver Change:</strong> $${(formData.newbalanceDest - formData.oldbalanceDest).toFixed(2)}</p>
+        </div>
+
+        <div class="probability-meter">
+          <h3>Fraud Probability</h3>
+          <div class="meter-container">
+            <div class="meter-bar" style="width: ${fraudPercentage}%">
+              ${fraudPercentage}%
+            </div>
+          </div>
+          <p>${getRiskAssessment(fraudPercentage)}</p>
+        </div>
+
+        ${isFraud ?
+          `<div class="fraud-warning">
+            <h3>Security Alert</h3>
+            <p>This transaction shows ${fraudPercentage}% fraud risk.</p>
+            <p>Recommended actions:</p>
+            <ul>
+              <li>Verify recipient details</li>
+              <li>Contact sender for confirmation</li>
+            </ul>
+          </div>` :
+          `<div class="safe-message">
+            <h3>Verification Passed</h3>
+            <p>Low risk (${fraudPercentage}%) transaction.</p>
+          </div>`}
+      `;
+    }
+
+    // Helper function for risk assessment
+    function getRiskAssessment(percentage) {
+      if (percentage < 10) return "Very Low Risk";
+      if (percentage < 30) return "Low Risk";
+      if (percentage < 60) return "Moderate Risk";
+      if (percentage < 85) return "High Risk";
+      return "Very High Risk";
+    }
+  </script>
+</body>
+</html>
