@@ -33,10 +33,11 @@ Our solution provides **automated detection with visual risk indicators**, makin
   - 🚨 Fraud case → Red pulse animation  
   - ✅ Safe transaction → Green checkmark  
 - Probability meter animation for fraud likelihood  
-![Uploading image.png…]()
+<img width="1108" height="630" alt="image" src="https://github.com/user-attachments/assets/7f193f78-fb83-4b53-b444-0d2dd7129b36" />
+
 
 **Code Highlight:**  
-```javascript
+``` javascript
 // Navigation between pages
 function showPage(page) {
   document.querySelectorAll('.page-container').forEach(p => p.style.display = 'none');
@@ -101,11 +102,44 @@ model = RandomForestClassifier(
 User Browser → Frontend → Flask API → ML Model
                 ↑              ↑
            (Displays)    (Processes/Rules)
+```
 
-✅ Key Takeaways
+# ✅ Key Takeaways  
 
-Visual interface makes AI insights user-friendly
+This file summarizes the **core strengths and design principles** of the Online Fraud Detection System.  
 
-Defensive programming ensures safety before ML predictions
+---
 
-Modular design → Easy to update/improve models
+## 🎨 User Experience  
+- **Simple, user-friendly UI** → Makes complex AI insights easy to understand  
+- **Visual indicators** → Red pulse for fraud, green checkmark for safe  
+
+---
+
+## 🛡️ Security & Validation  
+- **Defensive programming** → Rule-based checks before ML predictions  
+- **Validation layers** → Input fields are sanitized & verified  
+
+---
+
+## ⚡ System Design  
+- **Modular architecture** → Easy to replace/update ML models  
+- **API-driven backend** → Scalable, can integrate with mobile/web apps  
+
+---
+
+## 📊 AI & Explainability  
+- **Random Forest model** → Robust with imbalanced datasets  
+- **Probability-based output** → Shows how “fraudulent” a transaction is  
+
+---
+
+## 🔄 Scalability & Extensibility  
+- **Backend via Flask API** → Can be deployed on cloud servers  
+- **Dataset-driven improvement** → Model retrains easily on new fraud data  
+
+---
+
+💡 **In short:**  
+This system demonstrates how AI + a clean interface can **make fraud detection transparent, scalable, and user-friendly.**
+
